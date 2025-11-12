@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Punta Cana Experience - Gira y Gana</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body {
+      background: linear-gradient(135deg, #00bcd4, #009688);
+      color: #fff;
+      overflow-x: hidden;
+    }
+    header {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+    header p {
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+    .btn {
+      display: inline-block;
+      background: #ffeb3b;
+      color: #333;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-weight: 700;
+      margin-top: 20px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .btn:hover { background: #ffc107; }
+
+    /* Popup general */
+    .popup {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex; justify-content: center; align-items: center;
+      visibility: hidden; opacity: 0; transition: 0.4s;
+      z-index: 999;
+    }
+    .popup.active { visibility: visible; opacity: 1; }
+
+    .popup-content {
+      background: #fff;
+      color: #333;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      width: 320px;
+      position: relative;
+    }
+    .popup-content h2 {
+      margin-bottom: 15px;
+      color: #009688;
+    }
+    .close {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 18px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    /* Formulario */
+    form input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 2px solid #009688;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    form button {
+      background: #009688;
+      color: #fff;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    form button:hover { background: #00796b; }
+
+    /* Ruleta */
+    .wheel {
+      width: 250px; height: 250px;
+      border-radius: 50%;
+      border: 10px solid #009688;
+      margin: 20px auto;
+      position: relative;
+      overflow: hidden;
+      transform: rotate(0deg);
+      transition: transform 4s ease-out;
+    }
+
+    .wheel div {
+      position: absolute;
+      width: 50%; height: 50%;
+      color: #fff;
+      display: flex; justify-content: center; align-items: center;
+      transform-origin: 100% 100%;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .wheel div:nth-child(1) { transform: rotate(0deg); background: #ff9800; }
+    .wheel div:nth-child(2) { transform: rotate(51deg); background: #f44336; }
+    .wheel div:nth-child(3) { transform: rotate(102deg); background: #9c27b0; }
+    .wheel div:nth-child(4) { transform: rotate(153deg); background: #3f51b5; }
+    .wheel div:nth-child(5) { transform: rotate(204deg); background: #4caf50; }
+    .wheel div:nth-child(6) { transform: rotate(255deg); background: #009688; }
+    .wheel div:nth-child(7) { transform: rotate(306deg); background: #e91e63; }
+
+    .pointer {
+      width: 0; height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 25px solid #ffeb3b;
+      position: absolute;
+      top: -20px; left: 50%;
+      transform: translateX(-50%);
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.1);
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Vive la Magia de Punta Cana</h1>
+    <p>Excursiones, aventuras y experiencias inolvidables 🌴</p>
+    <a href="#" class="btn" id="openPopup">🎯 Gira la Ruleta y Gana</a>
+  </header>
+
+  <section style="padding:40px; text-align:center;">
+    <h2>Descubre lo Mejor del Caribe</h2>
+    <p>Buggy Tours, Saona Island, Coco Bongo, Party Boat y más experiencias exclusivas.</p>
+  </section>
+
+  <!-- Popup principal -->
+  <div class="popup" id="popup">
+    <div class="popup-content" id="popupContent">
+      <span class="close" id="closePopup">&times;</span>
+      <h2>🎁 Participa para Ganar</h2>
+      <p>Completa tus datos y obtén tu oportunidad de girar la ruleta</p>
+      <form id="leadForm">
+        <input type="text" id="name" placeholder="Tu nombre completo" required />
+        <input type="tel" id="whatsapp" placeholder="Tu WhatsApp" required />
+        <button type="submit">Continuar</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 Punta Cana Experience — Excursiones, diversión y sol todo el año ☀️
+  </footer>
+
+  <script>
+    const popup = document.getElementById('popup');
+    const popupContent = document.getElementById('popupContent');
+    const openPopup = document.getElementById('openPopup');
+    const closePopup = document.getElementById('closePopup');
+    const leadForm = document.getElementById('leadForm');
+
+    openPopup.onclick = () => popup.classList.add('active');
+    closePopup.onclick = () => popup.classList.remove('active');
+
+    leadForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const whatsapp = document.getElementById('whatsapp').value;
+
+      // Guardar o enviar datos a WhatsApp o base de datos
+      console.log("Nuevo lead:", name, whatsapp);
+
+      // Mostrar ruleta después del formulario
+      popupContent.innerHTML = `
+        <span class="close" id="closePopup">&times;</span>
+        <h2>🎉 ¡Gira y Gana!</h2>
+        <div class="pointer"></div>
+        <div class="wheel" id="wheel">
+          <div>Buggy Tours</div>
+          <div>Saona Island</div>
+          <div>Party Boat</div>
+          <div>Coco Bongo</div>
+          <div>Tiro Gratis</div>
+          <div>Excursión Nocturna</div>
+          <div>5% Descuento</div>
+        </div>
+        <button id="spinBtn">🎡 Girar</button>
+        <p id="result" style="margin-top:15px; font-weight:bold;"></p>
+      `;
+
+      // Reasignar cierre
+      document.getElementById('closePopup').onclick = () => popup.classList.remove('active');
+
+      const wheel = popupContent.querySelector('#wheel');
+      const spinBtn = popupContent.querySelector('#spinBtn');
+      const result = popupContent.querySelector('#result');
+
+      spinBtn.onclick = () => {
+        result.textContent = "";
+        const options = ['Tiro Gratis', '5% Descuento'];
+        const prize = options[Math.floor(Math.random() * options.length)];
+
+        const degrees = Math.floor(Math.random() * 3600) + 1800;
+        wheel.style.transform = `rotate(${degrees}deg)`;
+
+        setTimeout(() => {
+          result.textContent = `🎁 ¡Felicidades ${name}! Has ganado: ${prize}!`;
+        }, 4000);
+      };
+    });
+  </script>
+</body>
+</html>
