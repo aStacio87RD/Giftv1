@@ -1,247 +1,434 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Punta Cana Experience - Gira y Gana</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body {
-      background: linear-gradient(135deg, #00bcd4, #009688);
-      color: #fff;
-      overflow-x: hidden;
-      text-align: center;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Punta Cana Experience — Gira y Gana</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#009688; --teal-dark:#00796b; --sun:#ffeb3b; --bg1:#00bcd4;
+    --bg2:#00897b;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto; color:#063;
+    min-height:100vh; overflow-x:hidden; background: linear-gradient(160deg,var(--bg1),var(--bg2));
+    display:flex; flex-direction:column; align-items:center;
+  }
 
-    header {
-      padding: 70px 20px 40px;
-      background: rgba(255,255,255,0.05);
-    }
-    header h1 { font-size: 2.6rem; font-weight: 700; }
-    header p { font-size: 1.2rem; margin-top: 10px; }
-    .btn {
-      display: inline-block;
-      background: #ffeb3b;
-      color: #333;
-      padding: 15px 30px;
-      border-radius: 50px;
-      font-weight: 700;
-      margin-top: 20px;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-    .btn:hover { background: #ffc107; transform: scale(1.05); }
+  /* Animated background: waves + floating palms */
+  .ocean{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;}
+  .wave{
+    position:absolute; left:50%; transform:translateX(-50%); width:200%; height:40vh;
+    bottom:-10vh; background:radial-gradient(circle at 50% 0%, rgba(255,255,255,0.08), transparent 25%);
+    filter: blur(18px); opacity:0.6; animation:wave 8s linear infinite;
+  }
+  .wave.w2{bottom:-14vh; opacity:0.45; animation-duration:10s; transform:translateX(-50%) rotate(6deg)}
+  @keyframes wave { 0%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-52%) translateY(-6px)} 100%{transform:translateX(-50%) translateY(0)}}
 
-    section {
-      padding: 50px 20px;
-    }
+  .palms{
+    position:fixed; right:2vw; bottom:1vh; width:140px; height:140px; opacity:0.85;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><g fill="%23ffffff" opacity="0.25"><path d="M40 160c20-60 70-90 120-100 0 0-30 20-44 54 0 0-26-24-76 46z"/></g></svg>');
+    background-size:contain; background-repeat:no-repeat; transform-origin:center; animation:float 6s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
 
-    footer {
-      text-align: center;
-      padding: 40px 20px;
-      font-size: 0.9rem;
-      background: rgba(255,255,255,0.1);
-      margin-top: 60px;
-    }
+  header{z-index:2; text-align:center; padding:56px 20px 8px; color: #fff; text-shadow: 0 6px 18px rgba(0,0,0,0.25);}
+  header h1{font-size:2.4rem; letter-spacing:-0.6px; margin-bottom:8px}
+  header p{opacity:0.95; margin-bottom:12px}
 
-    /* Popup general */
-    .popup {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      display: flex; justify-content: center; align-items: center;
-      visibility: hidden; opacity: 0; transition: 0.4s;
-      z-index: 999;
-    }
-    .popup.active { visibility: visible; opacity: 1; }
+  .btn {background:var(--sun); color:#1b1b1b; border-radius:999px; padding:12px 22px; font-weight:700; text-decoration:none; display:inline-block; box-shadow:0 6px 18px rgba(0,0,0,0.18)}
+  .btn:active{transform:translateY(1px)}
 
-    .popup-content {
-      background: #fff;
-      color: #333;
-      padding: 30px;
-      border-radius: 15px;
-      text-align: center;
-      width: 320px;
-      position: relative;
-      animation: pop 0.5s ease;
-    }
+  main{z-index:2; width:100%; max-width:1100px; padding:28px; display:flex; gap:24px; align-items:flex-start; justify-content:center; flex-wrap:wrap}
+  .panel{background:rgba(255,255,255,0.06); border-radius:14px; padding:18px; color:#fff; min-width:260px; box-shadow:inset 0 1px 0 rgba(255,255,255,0.02)}
+  .panel h3{margin:0 0 8px 0; font-size:1.05rem}
+  .features li{margin:8px 0; font-size:0.95rem; list-style:none; padding-left:16px; position:relative}
+  .features li:before{content:'•'; position:absolute; left:0; color:var(--sun)}
 
-    @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  footer{z-index:2; color:rgba(255,255,255,0.9); margin:40px 0 70px; opacity:0.95}
 
-    .popup-content h2 { margin-bottom: 15px; color: #009688; }
-    .close {
-      position: absolute; top: 10px; right: 15px;
-      font-size: 18px; cursor: pointer; color: #999;
-    }
+  /* Popup */
+  .popup{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(1,1,1,0.6); z-index:999; visibility:hidden; opacity:0; transition:opacity .3s,visibility .3s}
+  .popup.show{visibility:visible; opacity:1}
+  .card{background:#fff; width:360px; max-width:92%; border-radius:14px; padding:18px; text-align:center; color:#073; position:relative; box-shadow:0 20px 60px rgba(2,20,16,0.45)}
+  .closeX{position:absolute; right:12px; top:10px; font-size:20px; color:#777; cursor:pointer}
 
-    /* Formulario */
-    form input {
-      width: 90%; padding: 10px; margin: 10px 0;
-      border: 2px solid #009688; border-radius: 8px; font-size: 14px;
-    }
-    form button {
-      background: #009688; color: #fff; border: none;
-      padding: 10px 25px; border-radius: 30px; font-weight: bold;
-      cursor: pointer; transition: 0.3s;
-    }
-    form button:hover { background: #00796b; }
+  /* Form */
+  form input, form button{width:100%; padding:10px 12px; margin:8px 0; border-radius:10px; border:1px solid rgba(0,0,0,0.08); font-size:15px}
+  form button{background:var(--teal); color:#fff; border: none; font-weight:700; cursor:pointer}
+  form small{display:block; opacity:0.7; margin-top:6px; font-size:12px}
 
-    /* Ruleta */
-    .wheel {
-      width: 250px; height: 250px;
-      border-radius: 50%; border: 10px solid #009688;
-      margin: 20px auto; position: relative;
-      overflow: hidden; transform: rotate(0deg);
-      transition: transform 4s ease-out;
-    }
+  /* Wheel container */
+  .wheel-wrap{display:flex; flex-direction:column; align-items:center}
+  .pointer{width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;border-bottom:28px solid var(--sun); position:relative; top:-12px}
+  .wheel{width:300px;height:300px;border-radius:50%;position:relative; overflow:visible;border:12px solid var(--teal); box-shadow:0 12px 40px rgba(2,20,16,0.35); background: conic-gradient(
+    #ff9800 0deg 51.43deg,
+    #f44336 51.43deg 102.86deg,
+    #9c27b0 102.86deg 154.29deg,
+    #3f51b5 154.29deg 205.72deg,
+    #4caf50 205.72deg 257.15deg,
+    #009688 257.15deg 308.58deg,
+    #e91e63 308.58deg 360deg
+  ); transition: transform 4.5s cubic-bezier(.18,.89,.32,1); }
 
-    .wheel div {
-      position: absolute; width: 50%; height: 50%;
-      color: #fff; display: flex; justify-content: center; align-items: center;
-      text-align: center; padding: 8px;
-      transform-origin: 100% 100%;
-      font-size: 11px; font-weight: 600;
-    }
+  .sector-label{
+    position:absolute; width:50%; height:50%; left:50%; top:50%; transform-origin:0 0;
+    display:flex; align-items:center; justify-content:center; padding:6px; text-align:center; font-weight:700; color:#fff;
+    font-size:13px; line-height:1; text-shadow:0 2px 6px rgba(0,0,0,0.35);
+  }
 
-    .wheel div:nth-child(1) { transform: rotate(0deg); background: #ff9800; }
-    .wheel div:nth-child(2) { transform: rotate(51deg); background: #f44336; }
-    .wheel div:nth-child(3) { transform: rotate(102deg); background: #9c27b0; }
-    .wheel div:nth-child(4) { transform: rotate(153deg); background: #3f51b5; }
-    .wheel div:nth-child(5) { transform: rotate(204deg); background: #4caf50; }
-    .wheel div:nth-child(6) { transform: rotate(255deg); background: #009688; }
-    .wheel div:nth-child(7) { transform: rotate(306deg); background: #e91e63; }
+  /* manual positions for 7 sectors (50% width/height, rotated by multiples of ~51.43deg) */
+  .s1{transform: rotate(0deg) translate(-4%, -100%) rotate(0deg)}   /* Buggy Tours */
+  .s2{transform: rotate(51.43deg) translate(-4%, -100%) rotate(-51.43deg)} /* Saona */
+  .s3{transform: rotate(102.86deg) translate(-4%, -100%) rotate(-102.86deg)} /* Party */
+  .s4{transform: rotate(154.29deg) translate(-4%, -100%) rotate(-154.29deg)} /* Coco */
+  .s5{transform: rotate(205.72deg) translate(-4%, -100%) rotate(-205.72deg)} /* Tiro Gratis */
+  .s6{transform: rotate(257.15deg) translate(-4%, -100%) rotate(-257.15deg)} /* Nocturna */
+  .s7{transform: rotate(308.58deg) translate(-4%, -100%) rotate(-308.58deg)} /* 5% */
 
-    .pointer {
-      width: 0; height: 0;
-      border-left: 15px solid transparent;
-      border-right: 15px solid transparent;
-      border-bottom: 25px solid #ffeb3b;
-      position: absolute; top: -20px; left: 50%;
-      transform: translateX(-50%);
-    }
+  #spinBtn{margin-top:14px; padding:12px 18px; border-radius:999px; font-size:16px}
+  #result{margin-top:12px; font-weight:700; white-space:pre-wrap}
 
-    /* Botones flotantes */
-    .float-whatsapp, .float-instagram {
-      position: fixed;
-      width: 55px; height: 55px;
-      border-radius: 50%;
-      display: flex; justify-content: center; align-items: center;
-      font-size: 26px; color: #fff; text-decoration: none;
-      z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-      transition: 0.3s;
-    }
-    .float-whatsapp { background: #25D366; bottom: 25px; right: 20px; }
-    .float-instagram { background: #E1306C; bottom: 25px; left: 20px; }
-    .float-whatsapp:hover, .float-instagram:hover { transform: scale(1.1); }
+  /* Floating buttons */
+  .float-whatsapp, .float-instagram{
+    position:fixed; width:60px; height:60px; border-radius:999px; display:flex; align-items:center; justify-content:center;
+    color:#fff; text-decoration:none; z-index:1001; box-shadow:0 12px 30px rgba(0,0,0,0.3); font-size:26px;
+  }
+  .float-whatsapp{background:#25D366; right:18px; bottom:20px}
+  .float-instagram{background:#E1306C; left:18px; bottom:20px}
+  .meta-note{font-size:12px; opacity:0.9; margin-top:8px}
 
-  </style>
+  @media (max-width:480px){
+    header h1{font-size:1.6rem}
+    .wheel{width:260px;height:260px}
+    .pointer{border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:22px solid var(--sun)}
+    .card{padding:14px}
+    .sector-label{font-size:12px}
+  }
+
+</style>
 </head>
 <body>
+
+  <div class="ocean" aria-hidden="true">
+    <div class="wave"></div>
+    <div class="wave w2"></div>
+    <div class="palms" aria-hidden="true"></div>
+  </div>
+
   <header>
-    <h1>Vive la Magia de Punta Cana</h1>
-    <p>Excursiones, aventuras y experiencias inolvidables 🌴</p>
-    <a href="#" class="btn" id="openPopup">🎯 Gira la Ruleta y Gana</a>
+    <h1>Punta Cana Experience</h1>
+    <p>Gira la ruleta y gana experiencias inolvidables 🌴</p>
+    <a id="openPopup" class="btn" href="#ruleta">🎯 Participar</a>
   </header>
 
-  <section>
-    <h2>Descubre lo Mejor del Caribe</h2>
-    <p>Buggy Tours, Saona Island, Coco Bongo, Party Boat y más experiencias exclusivas.</p>
-  </section>
+  <main>
+    <div class="panel">
+      <h3>Ofertas destacadas</h3>
+      <ul class="features">
+        <li>Buggy Tours por paisajes espectaculares</li>
+        <li>Excursión a Saona Island — playas cristalinas</li>
+        <li>Party Boat y Coco Bongo — fiesta inolvidable</li>
+        <li>Excursión nocturna exclusiva</li>
+      </ul>
+      <div style="margin-top:10px"><a class="btn" href="#contacto" id="reserveBtn">Reservar ahora</a></div>
+    </div>
 
-  <!-- Popup principal -->
-  <div class="popup" id="popup">
-    <div class="popup-content" id="popupContent">
-      <span class="close" id="closePopup">&times;</span>
-      <h2>🎁 Participa para Ganar</h2>
-      <p>Completa tus datos y obtén tu oportunidad de girar la ruleta</p>
-      <form id="leadForm">
-        <input type="text" id="name" placeholder="Tu nombre completo" required />
-        <input type="tel" id="whatsapp" placeholder="Tu WhatsApp" required />
-        <button type="submit">Continuar</button>
-      </form>
+    <div class="panel" style="max-width:560px;">
+      <h3>¿Cómo participar?</h3>
+      <p>Deja tu nombre y WhatsApp, recibe UN giro. Si obtienes <strong>Tiro Gratis</strong>, tendrás un intento extra automáticamente.</p>
+      <div style="margin-top:10px" class="meta-note">Al participar aceptas ser contactado por WhatsApp para coordinar tu premio.</div>
+    </div>
+  </main>
+
+  <footer>© 2025 Punta Cana Experience — Vive el Caribe</footer>
+
+  <!-- Popup / Ruleta -->
+  <div id="popup" class="popup" role="dialog" aria-modal="true" aria-label="Ruleta de premios">
+    <div class="card">
+      <div class="closeX" id="closePopup" title="Cerrar">✕</div>
+
+      <!-- step 1: lead form -->
+      <div id="stepForm">
+        <h2>🎁 Participa para Ganar</h2>
+        <p>Completa tus datos para obtener tu giro</p>
+        <form id="leadForm">
+          <input id="name" name="name" required placeholder="Tu nombre completo" autocomplete="name" />
+          <input id="phone" name="phone" required placeholder="Tu WhatsApp (ej: +1809...)" autocomplete="tel" />
+          <button type="submit">Continuar</button>
+          <small>Solo 1 giro por persona. Si tu premio es <strong>Tiro Gratis</strong>, obtienes un intento adicional.</small>
+        </form>
+      </div>
+
+      <!-- step 2: wheel -->
+      <div id="stepWheel" style="display:none">
+        <h2>🎡 ¡Gira la Ruleta!</h2>
+        <div class="wheel-wrap">
+          <div class="pointer" aria-hidden="true"></div>
+          <div id="wheel" class="wheel" role="img" aria-label="Ruleta de premios">
+            <!-- labels: visible via absolutely positioned elements -->
+            <div class="sector-label s1">Buggy<br> Tours</div>
+            <div class="sector-label s2">Saona<br> Island</div>
+            <div class="sector-label s3">Party<br> Boat</div>
+            <div class="sector-label s4">Coco<br> Bongo</div>
+            <div class="sector-label s5">Tiro<br> Gratis</div>
+            <div class="sector-label s6">Excursión<br> Nocturna</div>
+            <div class="sector-label s7">5%<br>Descuento</div>
+          </div>
+          <button id="spinBtn">🎯 Girar</button>
+          <div id="result" aria-live="polite"></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <footer>
-    © 2025 Punta Cana Experience — Excursiones, diversión y sol todo el año ☀️
-  </footer>
+  <!-- Floating buttons -->
+  <a class="float-whatsapp" id="floatWhats" href="https://wa.me/18093937692" target="_blank" aria-label="WhatsApp">💬</a>
+  <a class="float-instagram" id="floatIg" href="https://instagram.com/marcosrentcar" target="_blank" aria-label="Instagram">📸</a>
 
-  <!-- Botones flotantes -->
-  <a href="https://wa.me/18093937692" target="_blank" class="float-whatsapp">💬</a>
-  <a href="https://instagram.com/marcosrentcar" target="_blank" class="float-instagram">📸</a>
+<script>
+/* ====== CONFIG (cámbialo si hace falta) ====== */
+const WHATSAPP_NUMBER = "18093937692";
+const INSTAGRAM_URL = "https://instagram.com/marcosrentcar";
 
-  <script>
-    const popup = document.getElementById('popup');
-    const popupContent = document.getElementById('popupContent');
-    const openPopup = document.getElementById('openPopup');
-    const closePopup = document.getElementById('closePopup');
-    const leadForm = document.getElementById('leadForm');
+/* ====== LÓGICA ====== */
+const popup = document.getElementById('popup');
+const openPopup = document.getElementById('openPopup');
+const closePopup = document.getElementById('closePopup');
+const leadForm = document.getElementById('leadForm');
+const stepForm = document.getElementById('stepForm');
+const stepWheel = document.getElementById('stepWheel');
+const wheel = document.getElementById('wheel');
+const spinBtn = document.getElementById('spinBtn');
+const result = document.getElementById('result');
+const nameInput = document.getElementById('name');
+const phoneInput = document.getElementById('phone');
 
-    const WHATSAPP_NUMBER = "18093937692"; // 🔹 Cambia este número
-    const INSTAGRAM_URL = "https://instagram.com/marcosrentcar"; // 🔹 Enlace de Instagram
+let participant = null;      // {name,phone}
+let spinsLeft = 1;          // 1 spin initially; if Tiro Gratis -> +1
+let spinning = false;
 
-    openPopup.onclick = () => popup.classList.add('active');
-    closePopup.onclick = () => popup.classList.remove('active');
+/* Prize sectors (visual order) */
+const sectors = [
+  "Buggy Tours",
+  "Saona Island",
+  "Party Boat",
+  "Coco Bongo",
+  "Tiro Gratis",
+  "Excursión Nocturna",
+  "5% Descuento"
+];
 
-    leadForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const whatsapp = document.getElementById('whatsapp').value.trim();
+/* Only these can be final winners */
+const allowedWinners = ["Tiro Gratis", "5% Descuento"];
 
-      // Evita múltiples participaciones
-      if (localStorage.getItem('hasSpun')) {
-        alert('Ya has participado. Solo se permite un giro por persona.');
-        return;
-      }
+/* Map sector index for allowed winners for easier targeting */
+const indexOf = (name) => sectors.indexOf(name);
 
-      popupContent.innerHTML = `
-        <span class="close" id="closePopup">&times;</span>
-        <h2>🎉 ¡Gira y Gana!</h2>
-        <div class="pointer"></div>
-        <div class="wheel" id="wheel">
-          <div>Buggy Tours</div>
-          <div>Saona Island</div>
-          <div>Party Boat</div>
-          <div>Coco Bongo</div>
-          <div>Tiro Gratis</div>
-          <div>Excursión Nocturna</div>
-          <div>5% Descuento</div>
-        </div>
-        <button id="spinBtn">🎡 Girar</button>
-        <p id="result" style="margin-top:15px; font-weight:bold;"></p>
-      `;
+/* open popup on load and when clicking the button */
+window.addEventListener('load', ()=> {
+  // If user already finished (no spins), still allow popup but show message.
+  popup.classList.add('show');
+});
+openPopup.addEventListener('click', (e)=>{ e.preventDefault(); popup.classList.add('show'); });
 
-      document.getElementById('closePopup').onclick = () => popup.classList.remove('active');
+closePopup.addEventListener('click', ()=> { popup.classList.remove('show'); });
 
-      const wheel = popupContent.querySelector('#wheel');
-      const spinBtn = popupContent.querySelector('#spinBtn');
-      const result = popupContent.querySelector('#result');
-      let extraTurn = false;
+/* prevent multiple participations: if user previously exhausted spins, lock out */
+const localKey = 'pce_spins_left_v1';
+if (localStorage.getItem(localKey) !== null) {
+  spinsLeft = parseInt(localStorage.getItem(localKey), 10);
+  if (isNaN(spinsLeft)) spinsLeft = 0;
+}
 
-      spinBtn.onclick = () => {
+/* Handle lead form */
+leadForm.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const name = nameInput.value.trim();
+  const phone = phoneInput.value.trim();
+  if (!name || !phone) return alert('Por favor completa nombre y WhatsApp.');
+
+  participant = {name, phone};
+
+  if (spinsLeft <= 0) {
+    alert('Lo sentimos — ya participaste y no tienes más giros disponibles.');
+    popup.classList.remove('show');
+    return;
+  }
+
+  // Save lead simple en localStorage (puedes integrarlo a tu CRM desde aquí)
+  const leads = JSON.parse(localStorage.getItem('pce_leads_v1') || '[]');
+  leads.push({name,phone,ts:new Date().toISOString()});
+  localStorage.setItem('pce_leads_v1', JSON.stringify(leads));
+
+  // show wheel
+  stepForm.style.display = 'none';
+  stepWheel.style.display = 'block';
+
+  // focus spin accessibility
+  spinBtn.focus();
+});
+
+/* Play subtle sound using WebAudio (two-tone chime) */
+function playChime() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o1 = ctx.createOscillator();
+    const o2 = ctx.createOscillator();
+    const g = ctx.createGain();
+    o1.type = "sine"; o2.type = "sine";
+    o1.frequency.value = 720; o2.frequency.value = 880;
+    o1.connect(g); o2.connect(g); g.connect(ctx.destination);
+    g.gain.value = 0.0001;
+    const now = ctx.currentTime;
+    g.gain.linearRampToValueAtTime(0.02, now + 0.01);
+    o1.start(now); o2.start(now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+    setTimeout(()=>{ o1.stop(); o2.stop(); ctx.close(); }, 700);
+  } catch(e){ /* audio may be blocked until user gesture */ }
+}
+
+/* Compute rotation so that a given sector index lands under pointer.
+   Our wheel has 7 sectors, each covers 360/7 = ~51.42857deg.
+   The pointer is at top (0deg). We'll rotate wheel so targetSector is at top.
+   We also add many spins (full rotations) for effect.
+*/
+function computeRotationForIndex(targetIndex) {
+  const sectorAngle = 360 / sectors.length; // ~51.42857
+  // angle to bring sector center to 0deg: each sector center is at (start + sectorAngle/2)
+  // Our conic-gradient starts at 0deg for sector 0's start; we want the center of sector index to be at top.
+  const centerAngle = (targetIndex * sectorAngle) + (sectorAngle / 2);
+  // we need wheel rotation so that centerAngle ends at 0 -> rotation = 360 - centerAngle (mod 360)
+  const base = 360 - centerAngle;
+  // add extra full rotations (random between 6 and 9)
+  const extra = (Math.floor(Math.random() * 4) + 6) * 360;
+  return extra + base;
+}
+
+/* Choose prize - only from allowedWinners but we still spin to the corresponding sector */
+function choosePrize() {
+  const prize = allowedWinners[Math.floor(Math.random() * allowedWinners.length)];
+  return prize;
+}
+
+/* main spin behavior */
+spinBtn.addEventListener('click', async ()=>{
+  if (spinning) return;
+  if (!participant) return alert('Completa primero tus datos.');
+
+  if (spinsLeft <= 0) {
+    alert('No tienes giros disponibles.');
+    return;
+  }
+
+  spinning = true;
+  spinBtn.disabled = true;
+  result.textContent = '';
+
+  // choose allowed winner
+  const prize = choosePrize();
+
+  // find its sector index
+  const sectorIndex = indexOf(prize);
+  const rotation = computeRotationForIndex(sectorIndex);
+
+  // animate
+  wheel.style.transition = 'transform 4.5s cubic-bezier(.18,.89,.32,1)';
+  wheel.style.transform = `rotate(${rotation}deg)`;
+
+  // subtle spin sound
+  playChime();
+
+  // wait for animation end (~4.6s)
+  setTimeout(()=> {
+    // announce
+    const now = new Date();
+    const timestamp = now.toLocaleString();
+    result.textContent = `🎉 ¡Felicidades ${participant.name}! Has ganado: ${prize}`;
+
+    // prepare message to WhatsApp
+    const message = `Hola, soy ${participant.name} (${participant.phone}).\nParticipé en la ruleta de Punta Cana Experience y gané: ${prize}.\nFecha: ${timestamp}`;
+
+    // open WhatsApp in new tab (user can confirm)
+    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
+
+    // record spin history locally
+    const history = JSON.parse(localStorage.getItem('pce_history_v1') || '[]');
+    history.push({name:participant.name, phone:participant.phone, prize, ts:new Date().toISOString()});
+    localStorage.setItem('pce_history_v1', JSON.stringify(history));
+
+    // handle spinsLeft logic
+    spinsLeft = spinsLeft - 1;
+    if (prize === "Tiro Gratis") {
+      // grant one extra turn immediately if this was the first spin
+      spinsLeft = spinsLeft + 1;
+      result.textContent += `\n🎯 Has ganado un GIRO ADICIONAL (Tiro Gratis). Puedes girar otra vez.`;
+      // enable spin again (but protect against infinite loop)
+      // mark that this specific Tiro Gratis granted has been used if used again; we rely on spinsLeft decrement
+      spinBtn.disabled = false;
+    } else {
+      // prize was 5% Descuento: finalize participation
+      result.textContent += `\n📲 Te contactaremos por WhatsApp para coordinar.`;
+      localStorage.setItem(localKey, String(Math.max(0, spinsLeft)));
+      // lock out after a short delay
+      setTimeout(()=> {
         spinBtn.disabled = true;
-        result.textContent = "";
-        const options = ['Tiro Gratis', '5% Descuento'];
-        const prize = options[Math.floor(Math.random() * options.length)];
-        const degrees = Math.floor(Math.random() * 3600) + 1800;
-        wheel.style.transform = `rotate(${degrees}deg)`;
+      }, 200);
+    }
 
-        setTimeout(() => {
-          result.textContent = `🎁 ¡Felicidades ${name}! Has ganado: ${prize}!`;
-          // Enviar mensaje a WhatsApp
-          const message = `Hola, soy ${name}. Acabo de participar en la ruleta de Punta Cana Experience y gané: ${prize}!`;
-          window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+    // persist spinsLeft
+    localStorage.setItem(localKey, String(Math.max(0, spinsLeft)));
 
-          if (prize === "Tiro Gratis" && !extraTurn) {
-            extraTurn = true;
-            result.textContent += "\n🎯 ¡Tienes un giro adicional!";
-            spinBtn.disabled = false;
-          } else {
-            localStorage.setItem('hasSpun', 'true');
-          }
-        }, 4000);
-      };
-    });
-  </script>
+    // if no spins left, disable completely and change button text
+    if (spinsLeft <= 0) {
+      spinBtn.disabled = true;
+      spinBtn.textContent = 'Sin giros';
+    } else {
+      spinBtn.disabled = false;
+    }
+
+    spinning = false;
+  }, 4700);
+});
+
+/* small accessibility: hit Enter on phone input triggers submit */
+phoneInput.addEventListener('keyup', (e)=>{ if (e.key === 'Enter') leadForm.requestSubmit(); });
+
+/* Add behavior to floating WhatsApp & Instagram */
+document.getElementById('floatWhats').href = `https://wa.me/${WHATSAPP_NUMBER}`;
+document.getElementById('floatIg').href = INSTAGRAM_URL;
+
+/* If user previously exhausted spins completely, show a friendly message when they open popup */
+openPopup.addEventListener('click', ()=>{
+  if (parseInt(localStorage.getItem(localKey) || '1', 10) <= 0) {
+    alert('Ya participaste y no tienes más giros disponibles. ¡Gracias por interesarte!');
+  }
+});
+
+/* If user closes popup and wants to re-open, show the appropriate step */
+popup.addEventListener('click', (ev)=>{
+  if (ev.target === popup){
+    // close when clicking backdrop
+    popup.classList.remove('show');
+  }
+});
+
+/* When popup is shown, if participant already filled and spinsLeft>0, show wheel directly */
+popup.addEventListener('transitionend', ()=>{
+  // no-op for now
+});
+
+/* Optional: reset for testing - comment out in production
+localStorage.removeItem(localKey);
+localStorage.removeItem('pce_leads_v1');
+localStorage.removeItem('pce_history_v1');
+*/
+
+</script>
 </body>
 </html>
