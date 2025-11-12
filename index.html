@@ -10,19 +10,15 @@
       background: linear-gradient(135deg, #00bcd4, #009688);
       color: #fff;
       overflow-x: hidden;
-    }
-    header {
       text-align: center;
-      padding: 60px 20px;
     }
-    header h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
+
+    header {
+      padding: 70px 20px 40px;
+      background: rgba(255,255,255,0.05);
     }
-    header p {
-      font-size: 1.2rem;
-      margin-top: 10px;
-    }
+    header h1 { font-size: 2.6rem; font-weight: 700; }
+    header p { font-size: 1.2rem; margin-top: 10px; }
     .btn {
       display: inline-block;
       background: #ffeb3b;
@@ -34,7 +30,19 @@
       text-decoration: none;
       transition: 0.3s;
     }
-    .btn:hover { background: #ffc107; }
+    .btn:hover { background: #ffc107; transform: scale(1.05); }
+
+    section {
+      padding: 50px 20px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.1);
+      margin-top: 60px;
+    }
 
     /* Popup general */
     .popup {
@@ -55,60 +63,44 @@
       text-align: center;
       width: 320px;
       position: relative;
+      animation: pop 0.5s ease;
     }
-    .popup-content h2 {
-      margin-bottom: 15px;
-      color: #009688;
-    }
+
+    @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    .popup-content h2 { margin-bottom: 15px; color: #009688; }
     .close {
-      position: absolute;
-      top: 10px; right: 15px;
-      font-size: 18px;
-      cursor: pointer;
-      color: #999;
+      position: absolute; top: 10px; right: 15px;
+      font-size: 18px; cursor: pointer; color: #999;
     }
 
     /* Formulario */
     form input {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 2px solid #009688;
-      border-radius: 8px;
-      font-size: 14px;
+      width: 90%; padding: 10px; margin: 10px 0;
+      border: 2px solid #009688; border-radius: 8px; font-size: 14px;
     }
     form button {
-      background: #009688;
-      color: #fff;
-      border: none;
-      padding: 10px 25px;
-      border-radius: 30px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
+      background: #009688; color: #fff; border: none;
+      padding: 10px 25px; border-radius: 30px; font-weight: bold;
+      cursor: pointer; transition: 0.3s;
     }
     form button:hover { background: #00796b; }
 
     /* Ruleta */
     .wheel {
       width: 250px; height: 250px;
-      border-radius: 50%;
-      border: 10px solid #009688;
-      margin: 20px auto;
-      position: relative;
-      overflow: hidden;
-      transform: rotate(0deg);
+      border-radius: 50%; border: 10px solid #009688;
+      margin: 20px auto; position: relative;
+      overflow: hidden; transform: rotate(0deg);
       transition: transform 4s ease-out;
     }
 
     .wheel div {
-      position: absolute;
-      width: 50%; height: 50%;
-      color: #fff;
-      display: flex; justify-content: center; align-items: center;
+      position: absolute; width: 50%; height: 50%;
+      color: #fff; display: flex; justify-content: center; align-items: center;
+      text-align: center; padding: 8px;
       transform-origin: 100% 100%;
-      font-size: 12px;
-      font-weight: bold;
+      font-size: 11px; font-weight: 600;
     }
 
     .wheel div:nth-child(1) { transform: rotate(0deg); background: #ff9800; }
@@ -124,18 +116,24 @@
       border-left: 15px solid transparent;
       border-right: 15px solid transparent;
       border-bottom: 25px solid #ffeb3b;
-      position: absolute;
-      top: -20px; left: 50%;
+      position: absolute; top: -20px; left: 50%;
       transform: translateX(-50%);
     }
 
-    footer {
-      text-align: center;
-      padding: 40px 20px;
-      font-size: 0.9rem;
-      background: rgba(255,255,255,0.1);
-      margin-top: 60px;
+    /* Botones flotantes */
+    .float-whatsapp, .float-instagram {
+      position: fixed;
+      width: 55px; height: 55px;
+      border-radius: 50%;
+      display: flex; justify-content: center; align-items: center;
+      font-size: 26px; color: #fff; text-decoration: none;
+      z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      transition: 0.3s;
     }
+    .float-whatsapp { background: #25D366; bottom: 25px; right: 20px; }
+    .float-instagram { background: #E1306C; bottom: 25px; left: 20px; }
+    .float-whatsapp:hover, .float-instagram:hover { transform: scale(1.1); }
+
   </style>
 </head>
 <body>
@@ -145,7 +143,7 @@
     <a href="#" class="btn" id="openPopup">🎯 Gira la Ruleta y Gana</a>
   </header>
 
-  <section style="padding:40px; text-align:center;">
+  <section>
     <h2>Descubre lo Mejor del Caribe</h2>
     <p>Buggy Tours, Saona Island, Coco Bongo, Party Boat y más experiencias exclusivas.</p>
   </section>
@@ -168,6 +166,10 @@
     © 2025 Punta Cana Experience — Excursiones, diversión y sol todo el año ☀️
   </footer>
 
+  <!-- Botones flotantes -->
+  <a href="https://wa.me/18093937692" target="_blank" class="float-whatsapp">💬</a>
+  <a href="https://instagram.com/marcosrentcar" target="_blank" class="float-instagram">📸</a>
+
   <script>
     const popup = document.getElementById('popup');
     const popupContent = document.getElementById('popupContent');
@@ -175,18 +177,23 @@
     const closePopup = document.getElementById('closePopup');
     const leadForm = document.getElementById('leadForm');
 
+    const WHATSAPP_NUMBER = "18093937692"; // 🔹 Cambia este número
+    const INSTAGRAM_URL = "https://instagram.com/marcosrentcar"; // 🔹 Enlace de Instagram
+
     openPopup.onclick = () => popup.classList.add('active');
     closePopup.onclick = () => popup.classList.remove('active');
 
     leadForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const name = document.getElementById('name').value;
-      const whatsapp = document.getElementById('whatsapp').value;
+      const name = document.getElementById('name').value.trim();
+      const whatsapp = document.getElementById('whatsapp').value.trim();
 
-      // Guardar o enviar datos a WhatsApp o base de datos
-      console.log("Nuevo lead:", name, whatsapp);
+      // Evita múltiples participaciones
+      if (localStorage.getItem('hasSpun')) {
+        alert('Ya has participado. Solo se permite un giro por persona.');
+        return;
+      }
 
-      // Mostrar ruleta después del formulario
       popupContent.innerHTML = `
         <span class="close" id="closePopup">&times;</span>
         <h2>🎉 ¡Gira y Gana!</h2>
@@ -204,23 +211,34 @@
         <p id="result" style="margin-top:15px; font-weight:bold;"></p>
       `;
 
-      // Reasignar cierre
       document.getElementById('closePopup').onclick = () => popup.classList.remove('active');
 
       const wheel = popupContent.querySelector('#wheel');
       const spinBtn = popupContent.querySelector('#spinBtn');
       const result = popupContent.querySelector('#result');
+      let extraTurn = false;
 
       spinBtn.onclick = () => {
+        spinBtn.disabled = true;
         result.textContent = "";
         const options = ['Tiro Gratis', '5% Descuento'];
         const prize = options[Math.floor(Math.random() * options.length)];
-
         const degrees = Math.floor(Math.random() * 3600) + 1800;
         wheel.style.transform = `rotate(${degrees}deg)`;
 
         setTimeout(() => {
           result.textContent = `🎁 ¡Felicidades ${name}! Has ganado: ${prize}!`;
+          // Enviar mensaje a WhatsApp
+          const message = `Hola, soy ${name}. Acabo de participar en la ruleta de Punta Cana Experience y gané: ${prize}!`;
+          window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+
+          if (prize === "Tiro Gratis" && !extraTurn) {
+            extraTurn = true;
+            result.textContent += "\n🎯 ¡Tienes un giro adicional!";
+            spinBtn.disabled = false;
+          } else {
+            localStorage.setItem('hasSpun', 'true');
+          }
         }, 4000);
       };
     });
